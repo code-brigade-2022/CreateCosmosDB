@@ -76,26 +76,6 @@ function exit(message) {
     process.stdin.on('data', process.exit.bind(process, 0))
 }
 
-async function queryContainer() {
-    console.log(`Querying container:\n Aeropuertos`)
-
-    // query to return all children in a family
-    // Including the partition key value of country in the WHERE filter results in a more efficient query
-    const querySpec = {
-        query: 'SELECT VALUE r.children FROM root r WHERE r.partitionKey = @country'
-    }
-
-    const { resources: results } = await client
-        .database(databaseId)
-        .container("Aeropuertos")
-        .items.query(querySpec)
-        .fetchAll()
-    for (var queryResult of results) {
-        let resultString = JSON.stringify(queryResult, null, "\t")
-        console.log(`\tQuery returned ${resultString}\n`)
-    }
-}
-
 createDatabase(db_name)
 .then(() => createContainer(container_name_1, db_name, partitionKey_1))
 .then(() => createContainer(container_name_2, db_name, partitionKey_2))
